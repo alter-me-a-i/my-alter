@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>My-Alter. Own Your Self.</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="googlebot" content="noindex, nofollow" />
+<meta name="description" content="The private side. The neurotype — the model of you. Local-first, permission-gated. Nothing leaves your device." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================
+   MY-ALTER — single-file, bare bones
+   The private side. The vault. The neurotype.
+   No tracking. No cookies. No third-party signin.
+   Nothing leaves the device.
+   ============================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow-x: hidden; }
+a { color: inherit; }
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  animation: fade 700ms ease both;
+}
+@keyframes fade { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
+/* kicker */
+.kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.kicker .lock { opacity: 0.7; }
+
+/* wordmark — mirror of alter-me's treatment */
+.brand {
+  font-size: clamp(1.75rem, 6vw, 2.6rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin-bottom: 0.6rem;
+}
+.brand .dash { display: inline-block; transform: scaleX(1.6); margin: 0 0.15em; opacity: 0.7; }
+
+.tag {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.55;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+.subtag {
+  text-align: center;
+  font-size: 0.72rem;
+  opacity: 0.3;
+  letter-spacing: 0.06em;
+  margin-bottom: 3rem;
+}
+
+/* hairline rule */
+.rule { height: 1px; background: rgba(255,255,255,0.14); margin: 2.5rem 0; }
+
+/* sealed line */
+.sealed {
+  text-align: center;
+  font-size: 0.82rem;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+.sealed .cursor {
+  display: inline-block;
+  width: 0.5em; height: 1em;
+  background: #fff;
+  margin-left: 0.15em;
+  vertical-align: -0.12em;
+  animation: blink 1.2s steps(1) infinite;
+}
+@keyframes blink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+
+p.body {
+  font-size: 0.86rem;
+  opacity: 0.78;
+  margin: 0 0 1.1rem;
+}
+p.body .em { opacity: 1; color: #fff; }
+
+/* the mind triad — bare list, no cards */
+.triad { margin: 0.5rem 0 0; }
+.triad .row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.8rem;
+}
+.triad .row:last-child { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.triad .fn {
+  flex: 0 0 5.5rem;
+  opacity: 0.95;
+  letter-spacing: 0.02em;
+}
+.triad .desc { opacity: 0.6; }
+
+/* permission rule — set apart, no decoration but an indent bar */
+.permission {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  border-left: 1px solid rgba(255,255,255,0.3);
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* pairing */
+.pair {
+  text-align: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  opacity: 0.6;
+  margin: 0.5rem 0 0.3rem;
+}
+.pair .mirror { opacity: 0.45; margin: 0 0.5em; }
+.pair .self { opacity: 1; }
+
+/* links */
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-top: 1rem;
+}
+.links a {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity 150ms;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+}
+.links a:hover { opacity: 1; border-bottom-color: rgba(255,255,255,0.5); }
+
+/* footer */
+.foot {
+  text-align: center;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  opacity: 0.3;
+  margin-top: 3rem;
+  text-transform: lowercase;
+}
+.foot .sig { display: block; margin-top: 0.4rem; opacity: 0.7; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="kicker">private <span class="lock">·</span> the vault <span class="lock">·</span> by your key alone</div>
+
+    <div class="brand">my<span class="dash">-</span>alter</div>
+    <div class="tag">own your self.</div>
+    <div class="subtag">know thyself.</div>
+
+    <div class="sealed">the vault is sealed<span class="cursor"></span></div>
+    <p class="body" style="text-align:center; opacity:0.5; font-size:0.78rem;">this door opens only to you, and only through the cortex.</p>
+
+    <div class="rule"></div>
+
+    <p class="body">Where <span class="em">alter-me</span> is the face you deploy outward &mdash; the sociotype &mdash; <span class="em">my-alter</span> is the model it is drawn from. The <span class="em">neurotype</span>: your raw self, aggregated and interpreted, on your terms. How you are actually wired. The nucleus.</p>
+
+    <p class="body">It lives behind the membrane. The raw exhaust of your behaviour never leaves the device. The interpreter reads it only through an explicit, scoped, revocable grant &mdash; never a privileged back-channel.</p>
+
+    <div class="triad">
+      <div class="row"><div class="fn">profile()</div><div class="desc">the distilled model of you, assembled on device</div></div>
+      <div class="row"><div class="fn">search()</div><div class="desc">ask your own history; the answer never crosses a boundary</div></div>
+      <div class="row"><div class="fn">ask()</div><div class="desc">a mirror, not a recommendation &mdash; powered by the AI you bring</div></div>
+    </div>
+
+    <div class="rule"></div>
+
+    <p class="permission">Default&#8209;deny. The interpreter and any outward representative may access your data only through the cortex's permission gate. Every grant is explicit, scoped to what and for how long, and revocable.</p>
+
+    <div class="pair"><span class="mirror">alter-me</span>&#8651;<span class="self">my-alter</span></div>
+    <p class="body" style="text-align:center; opacity:0.4; font-size:0.74rem; margin-top:0.4rem;">two doors. one self. the dash is the cortex.</p>
+
+    <div class="links">
+      <a href="https://marcoajello.ai">the cortex &middot; hub</a>
+      <a href="https://alter-me.ai">the public face</a>
+      <a href="https://github.com/alter-me-a-i/alter-me">open source</a>
+    </div>
+
+    <div class="foot">
+      local&#8209;first &middot; permission&#8209;gated &middot; nothing leaves your device
+      <span class="sig">my-alter.ai &mdash; opening soon</span>
+    </div>
+  </main>
+</body>
+</html>
