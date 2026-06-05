@@ -3,219 +3,524 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-<title>My-Alter. Own Your Self.</title>
+<title>my-alter — set up your own private, AI-driven vault</title>
+<!-- Private-facing: keep this out of search indexes. -->
 <meta name="robots" content="noindex, nofollow" />
 <meta name="googlebot" content="noindex, nofollow" />
-<meta name="description" content="The private side. The neurotype — the model of you. Local-first, permission-gated. Nothing leaves your device." />
+<meta name="description" content="my-alter is where you set up your own private, AI-driven vault — on your own machine, that you own. The extension captures what you choose, the Vault app keeps it encrypted on your computer, and the cortex connects them. Nothing leaves your machine." />
+<meta property="og:title" content="my-alter — your own private, AI-driven vault" />
+<meta property="og:description" content="Set up a private, local-first vault on your own machine. You hold the key. Nothing leaves your computer." />
+<meta property="og:type" content="website" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
 <style>
-/* ============================================
-   MY-ALTER — single-file, bare bones
-   The private side. The vault. The neurotype.
-   No tracking. No cookies. No third-party signin.
-   Nothing leaves the device.
-   ============================================ */
+/* ============================================================
+   my-alter.ai — the private side
+   Single static page. Canonical alter/me/a/i design tokens,
+   inlined (no build step). All-monospace, deep violet canvas,
+   hot-pink + coral brand, cool purple for the private side.
+   ============================================================ */
+:root {
+  --bg: #0c0818;
+  --bg-2: #120c24;
+  --surface: #15102a;
+  --surface-2: #1f1740;
+  --border: #2e2154;
+
+  --fg: #fdf2ff;
+  --muted: #a89ad0;
+  --faint: #6f60a0;
+
+  --accent: #ff2e88;   /* hot pink — the slashes, the brand */
+  --accent-2: #ff8a3d; /* coral */
+  --private: #7d72cf;  /* the private side reads cool */
+  --ok: #00f0a8;
+
+  --fill-primary: linear-gradient(135deg, #ff2e88, #ff8a3d);
+  --font: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow-x: hidden; }
-a { color: inherit; }
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg);
+  color-scheme: dark;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
-  background: #000;
-  color: #fff;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
+  background:
+    radial-gradient(1100px 600px at 50% -10%, #1a0f33 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, #241152 0%, transparent 55%),
+    var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-.wrap {
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto;
-  animation: fade 700ms ease both;
-}
-@keyframes fade { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+a { color: inherit; }
 
-/* kicker */
-.kicker {
-  font-size: 0.68rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  opacity: 0.45;
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-.kicker .lock { opacity: 0.7; }
+.wrap { width: 100%; max-width: 960px; margin: 0 auto; padding-inline: 1.25rem; }
+@media (min-width: 640px) { .wrap { padding-inline: 1.5rem; } }
 
-/* wordmark — mirror of alter-me's treatment */
-.brand {
-  font-size: clamp(1.75rem, 6vw, 2.6rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  text-align: center;
-  margin-bottom: 0.6rem;
+/* faint cortex grid behind the hero */
+.cortex-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(46,33,84,0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(46,33,84,0.4) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(700px 420px at 50% 26%, black, transparent 75%);
+  mask-image: radial-gradient(700px 420px at 50% 26%, black, transparent 75%);
 }
-.brand .dash { display: inline-block; transform: scaleX(1.6); margin: 0 0.15em; opacity: 0.7; }
 
-.tag {
-  text-align: center;
+/* ---------- nav ---------- */
+nav {
+  position: relative;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 1.6rem;
   font-size: 0.85rem;
-  opacity: 0.55;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.4rem;
 }
-.subtag {
-  text-align: center;
+nav .mark { font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; }
+nav .mark .slash { color: var(--accent); padding-inline: 0.04em; }
+nav .navlinks { display: flex; align-items: center; gap: 1.15rem; color: var(--faint); }
+nav .navlinks a { text-decoration: none; transition: color 150ms; }
+nav .navlinks a:hover { color: var(--fg); }
+nav .navlinks .hide-sm { display: none; }
+@media (min-width: 640px) { nav .navlinks .hide-sm { display: inline; } }
+.pill-link {
+  border: 1px solid rgba(125,114,207,0.45);
+  color: var(--private);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  white-space: nowrap;
+  transition: background 150ms, border-color 150ms;
+}
+.pill-link:hover { background: rgba(125,114,207,0.12); }
+
+/* ---------- hero ---------- */
+header { position: relative; overflow: hidden; }
+.hero { position: relative; text-align: center; padding: 3.5rem 0 2.5rem; }
+@media (min-width: 640px) { .hero { padding: 6rem 0 3.5rem; } }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 1px solid rgba(125,114,207,0.45);
+  background: rgba(125,114,207,0.1);
+  color: var(--private);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
   font-size: 0.72rem;
-  opacity: 0.3;
-  letter-spacing: 0.06em;
-  margin-bottom: 3rem;
-}
-
-/* hairline rule */
-.rule { height: 1px; background: rgba(255,255,255,0.14); margin: 2.5rem 0; }
-
-/* sealed line */
-.sealed {
-  text-align: center;
-  font-size: 0.82rem;
-  opacity: 0.8;
   letter-spacing: 0.02em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.6rem;
 }
-.sealed .cursor {
-  display: inline-block;
-  width: 0.5em; height: 1em;
-  background: #fff;
-  margin-left: 0.15em;
-  vertical-align: -0.12em;
-  animation: blink 1.2s steps(1) infinite;
-}
-@keyframes blink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+.badge .dot { width: 0.45rem; height: 0.45rem; border-radius: 999px; background: var(--private); }
 
-p.body {
-  font-size: 0.86rem;
-  opacity: 0.78;
-  margin: 0 0 1.1rem;
+.wordmark {
+  white-space: nowrap;
+  font-size: clamp(2.8rem, 13vw, 5rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
-p.body .em { opacity: 1; color: #fff; }
+.wordmark .slash { color: var(--accent); font-weight: 400; padding-inline: 0.02em; }
 
-/* the mind triad — bare list, no cards */
-.triad { margin: 0.5rem 0 0; }
-.triad .row {
-  display: flex;
-  gap: 1rem;
-  padding: 0.7rem 0;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  font-size: 0.8rem;
+.hero .lede {
+  margin: 1.5rem auto 0;
+  max-width: 38rem;
+  font-size: clamp(1rem, 2.6vw, 1.3rem);
+  color: var(--muted);
 }
-.triad .row:last-child { border-bottom: 1px solid rgba(255,255,255,0.1); }
-.triad .fn {
-  flex: 0 0 5.5rem;
-  opacity: 0.95;
-  letter-spacing: 0.02em;
-}
-.triad .desc { opacity: 0.6; }
-
-/* permission rule — set apart, no decoration but an indent bar */
-.permission {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  border-left: 1px solid rgba(255,255,255,0.3);
-  padding-left: 1rem;
-  margin: 0.5rem 0;
+.hero .lede strong { color: var(--fg); font-weight: 700; }
+.hero .sub {
+  margin: 1.25rem auto 0;
+  max-width: 34rem;
+  font-size: 0.85rem;
+  color: var(--faint);
 }
 
-/* pairing */
-.pair {
-  text-align: center;
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
-  opacity: 0.6;
-  margin: 0.5rem 0 0.3rem;
+.cta-row {
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0.75rem; margin: 2.25rem auto 0; max-width: 22rem;
 }
-.pair .mirror { opacity: 0.45; margin: 0 0.5em; }
-.pair .self { opacity: 1; }
-
-/* links */
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.4rem;
-  margin-top: 1rem;
+@media (min-width: 640px) {
+  .cta-row { flex-direction: row; flex-wrap: wrap; justify-content: center; max-width: none; }
 }
-.links a {
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.9rem; font-weight: 700;
   text-decoration: none;
-  opacity: 0.55;
-  transition: opacity 150ms;
-  border-bottom: 1px solid transparent;
-  padding-bottom: 2px;
+  transition: opacity 150ms, border-color 150ms, background 150ms;
 }
-.links a:hover { opacity: 1; border-bottom-color: rgba(255,255,255,0.5); }
+.btn-primary { background-image: var(--fill-primary); background-color: var(--accent); color: var(--bg); }
+.btn-primary:hover { opacity: 0.9; }
+.btn-ghost { border: 1px solid var(--border); background: rgba(21,16,42,0.6); color: var(--fg); }
+.btn-ghost:hover { border-color: rgba(125,114,207,0.55); }
 
-/* footer */
-.foot {
-  text-align: center;
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  opacity: 0.3;
-  margin-top: 3rem;
-  text-transform: lowercase;
+/* ---------- sections ---------- */
+section { position: relative; padding: 3.25rem 0; scroll-margin-top: 1.5rem; }
+@media (min-width: 640px) { section { padding: 4.5rem 0; } }
+
+.section-head { max-width: 42rem; margin: 0 auto 2.25rem; text-align: center; }
+.section-head h2 {
+  font-size: clamp(1.6rem, 5vw, 2.3rem);
+  font-weight: 800; letter-spacing: -0.02em;
 }
-.foot .sig { display: block; margin-top: 0.4rem; opacity: 0.7; }
+.section-head p { margin-top: 0.85rem; color: var(--muted); font-size: 0.95rem; }
+.eyebrow {
+  display: block; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--private); margin-bottom: 0.7rem;
+}
+
+/* ---------- the three pieces ---------- */
+.pieces { display: grid; gap: 1rem; }
+@media (min-width: 800px) { .pieces { grid-template-columns: repeat(3, 1fr); } }
+.piece {
+  border: 1px solid var(--border);
+  background: rgba(21,16,42,0.55);
+  border-radius: 1.1rem;
+  padding: 1.5rem;
+}
+.piece .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; border-radius: 0.6rem;
+  background: rgba(125,114,207,0.14); color: var(--private);
+  font-weight: 700; font-size: 0.9rem; margin-bottom: 0.9rem;
+}
+.piece h3 { font-size: 1.05rem; font-weight: 700; }
+.piece h3 .kind { display: block; font-size: 0.72rem; letter-spacing: 0.04em; color: var(--accent-2); font-weight: 500; margin-top: 0.15rem; }
+.piece p { margin-top: 0.7rem; color: var(--muted); font-size: 0.88rem; }
+
+.flow-note {
+  margin: 1.75rem auto 0; max-width: 44rem; text-align: center;
+  color: var(--faint); font-size: 0.8rem;
+}
+.flow-note .ok { color: var(--ok); }
+
+/* ---------- set it up: steps ---------- */
+.steps { max-width: 46rem; margin: 0 auto; display: grid; gap: 1rem; }
+.step {
+  display: grid; grid-template-columns: 2.4rem 1fr; gap: 1rem; align-items: start;
+  border: 1px solid var(--border);
+  background: rgba(21,16,42,0.55);
+  border-radius: 1.1rem;
+  padding: 1.35rem 1.4rem;
+}
+.step .sn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.4rem; height: 2.4rem; border-radius: 0.7rem;
+  background-image: var(--fill-primary); color: var(--bg);
+  font-weight: 800; font-size: 1rem;
+}
+.step h3 { font-size: 1rem; font-weight: 700; }
+.step p { margin-top: 0.4rem; color: var(--muted); font-size: 0.88rem; }
+.step p a { color: var(--accent-2); text-decoration: none; border-bottom: 1px solid rgba(255,138,61,0.4); }
+.step p a:hover { border-bottom-color: var(--accent-2); }
+.step .soon {
+  display: inline-block; margin-left: 0.4rem;
+  font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-2); border: 1px solid rgba(255,138,61,0.4);
+  border-radius: 999px; padding: 0.08rem 0.5rem; vertical-align: 0.08em;
+}
+.callout {
+  max-width: 46rem; margin: 1.5rem auto 0;
+  border-left: 2px solid var(--private);
+  background: rgba(125,114,207,0.07);
+  border-radius: 0 0.6rem 0.6rem 0;
+  padding: 1rem 1.2rem;
+  color: var(--muted); font-size: 0.85rem;
+}
+.callout strong { color: var(--fg); }
+
+/* ---------- links out ---------- */
+.outlinks { display: grid; gap: 0.85rem; max-width: 46rem; margin: 0 auto; }
+@media (min-width: 640px) { .outlinks { grid-template-columns: repeat(2, 1fr); } }
+.outlink {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  border: 1px solid var(--border);
+  background: rgba(21,16,42,0.55);
+  border-radius: 0.9rem;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  transition: border-color 150ms, background 150ms;
+}
+.outlink:hover { border-color: rgba(125,114,207,0.55); background: rgba(31,23,64,0.6); }
+.outlink .ol-name { font-weight: 700; font-size: 0.92rem; }
+.outlink .ol-sub { color: var(--faint); font-size: 0.76rem; margin-top: 0.15rem; }
+.outlink .arrow { color: var(--private); font-size: 0.95rem; }
+
+/* ---------- footer ---------- */
+footer { border-top: 1px solid rgba(46,33,84,0.6); }
+.foot-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 1.1rem;
+  padding: 2.25rem 0; text-align: center;
+  color: var(--faint); font-size: 0.8rem;
+}
+@media (min-width: 640px) { .foot-inner { flex-direction: row; justify-content: space-between; text-align: left; } }
+.foot-inner .fmark .slash { color: var(--accent); }
+.foot-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.1rem; }
+.foot-links a { text-decoration: none; transition: color 150ms; }
+.foot-links a:hover { color: var(--fg); }
+
+.break-token { overflow-wrap: anywhere; word-break: break-word; }
 </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="kicker">private <span class="lock">·</span> the vault <span class="lock">·</span> by your key alone</div>
 
-    <div class="brand">my<span class="dash">-</span>alter</div>
-    <div class="tag">own your self.</div>
-    <div class="subtag">know thyself.</div>
+  <!-- ───────────────── HERO ───────────────── -->
+  <header>
+    <div class="cortex-grid"></div>
+    <div class="wrap">
+      <nav>
+        <span class="mark">my<span class="slash">-</span>alter</span>
+        <div class="navlinks">
+          <a class="hide-sm" href="#pieces">how it fits</a>
+          <a class="hide-sm" href="#setup">set it up</a>
+          <a class="pill-link" href="https://github.com/alter-me-a-i" target="_blank" rel="noopener noreferrer">github ↗</a>
+        </div>
+      </nav>
 
-    <div class="sealed">the vault is sealed<span class="cursor"></span></div>
-    <p class="body" style="text-align:center; opacity:0.5; font-size:0.78rem;">this door opens only to you, and only through the cortex.</p>
+      <div class="hero">
+        <span class="badge"><span class="dot"></span> the private side · local-first · you hold the key</span>
 
-    <div class="rule"></div>
+        <h1 class="wordmark">my<span class="slash">-</span>alter</h1>
 
-    <p class="body">Where <span class="em">alter-me</span> is the face you deploy outward &mdash; the sociotype &mdash; <span class="em">my-alter</span> is the model it is drawn from. The <span class="em">neurotype</span>: your raw self, aggregated and interpreted, on your terms. How you are actually wired. The nucleus.</p>
+        <p class="lede">
+          Your own <strong>AI-driven vault</strong> — on your machine,
+          that <strong>you own</strong>. A private store of your data that
+          stays on your computer, opened only by you.
+        </p>
+        <p class="sub">
+          Own your data. Nothing you capture ever has to leave your machine.
+          This is the place to set it up — in plain steps, no jargon.
+        </p>
 
-    <p class="body">It lives behind the membrane. The raw exhaust of your behaviour never leaves the device. The interpreter reads it only through an explicit, scoped, revocable grant &mdash; never a privileged back-channel.</p>
-
-    <div class="triad">
-      <div class="row"><div class="fn">profile()</div><div class="desc">the distilled model of you, assembled on device</div></div>
-      <div class="row"><div class="fn">search()</div><div class="desc">ask your own history; the answer never crosses a boundary</div></div>
-      <div class="row"><div class="fn">ask()</div><div class="desc">a mirror, not a recommendation &mdash; powered by the AI you bring</div></div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#setup">Set up your vault ↓</a>
+          <a class="btn btn-ghost" href="#pieces">How it fits together</a>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <div class="rule"></div>
+  <!-- ───────────────── HOW IT FITS TOGETHER ───────────────── -->
+  <section id="pieces">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">how it fits together</span>
+        <h2>Three pieces, working only for you</h2>
+        <p>
+          Think of it as three small parts on your own computer. Each one has a
+          simple job, and none of them phone home.
+        </p>
+      </div>
 
-    <p class="permission">Default&#8209;deny. The interpreter and any outward representative may access your data only through the cortex's permission gate. Every grant is explicit, scoped to what and for how long, and revocable.</p>
+      <div class="pieces">
+        <div class="piece">
+          <span class="num">1</span>
+          <h3>The extension
+            <span class="kind">in your browser</span>
+          </h3>
+          <p>
+            A lightweight browser add-on that captures and filters only what
+            <em>you</em> choose to keep. You decide what it pays attention to —
+            it ignores everything else.
+          </p>
+        </div>
+        <div class="piece">
+          <span class="num">2</span>
+          <h3>The Vault app
+            <span class="kind">on your computer</span>
+          </h3>
+          <p>
+            A private, encrypted store that lives on your own machine. Your data
+            is locked, and <strong>you hold the key</strong> — a master password
+            only you know. Nothing is stored in the cloud.
+          </p>
+        </div>
+        <div class="piece">
+          <span class="num">3</span>
+          <h3>The cortex
+            <span class="kind">the engine in the middle</span>
+          </h3>
+          <p>
+            The quiet engine that connects the two — and acts as a gatekeeper.
+            It decides what's allowed to reach your Vault. Everything happens on
+            your machine; nothing leaves it.
+          </p>
+        </div>
+      </div>
 
-    <div class="pair"><span class="mirror">alter-me</span>&#8651;<span class="self">my-alter</span></div>
-    <p class="body" style="text-align:center; opacity:0.4; font-size:0.74rem; margin-top:0.4rem;">two doors. one self. the dash is the cortex.</p>
-
-    <div class="links">
-      <a href="https://marcoajello.ai">the cortex &middot; hub</a>
-      <a href="https://alter-me.ai">the public face</a>
-      <a href="https://github.com/alter-me-a-i/alter-me">open source</a>
+      <p class="flow-note">
+        The flow is simple: you choose &rarr; the extension captures &rarr; the
+        cortex checks it &rarr; your Vault keeps it, encrypted.
+        <span class="ok">Every step stays on your computer.</span>
+      </p>
     </div>
+  </section>
 
-    <div class="foot">
-      local&#8209;first &middot; permission&#8209;gated &middot; nothing leaves your device
-      <span class="sig">my-alter.ai &mdash; opening soon</span>
+  <!-- ───────────────── SET IT UP ───────────────── -->
+  <section id="setup">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">set it up</span>
+        <h2>Get your vault running</h2>
+        <p>
+          Five plain steps. Some parts are still early, so where there isn't a
+          one-click install yet, we'll say so honestly.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="sn">1</span>
+          <div>
+            <h3>Get the extension <span class="soon">coming soon</span></h3>
+            <p>
+              This is the browser add-on that captures what you choose. It isn't
+              in the browser stores yet, so for now you add it from the source.
+              Grab it here:
+              <a href="https://github.com/alter-me-a-i/alter-me" target="_blank" rel="noopener noreferrer">github.com/alter-me-a-i/alter-me ↗</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="sn">2</span>
+          <div>
+            <h3>Get the Vault app <span class="soon">coming soon</span></h3>
+            <p>
+              This is your private, encrypted store. A packaged download is on
+              the way; for now you run it from the source. Get it here:
+              <a href="https://github.com/alter-me-a-i/vault" target="_blank" rel="noopener noreferrer">github.com/alter-me-a-i/vault ↗</a>,
+              and follow its setup notes.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="sn">3</span>
+          <div>
+            <h3>Open your Vault</h3>
+            <p>
+              Start the Vault app and set your master password. That password is
+              your key — it never leaves your machine, and only you can open the
+              Vault with it. Keep it somewhere safe; nobody can recover it for you.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="sn">4</span>
+          <div>
+            <h3>Connect them</h3>
+            <p>
+              Your Vault app has an <em>access token</em> — a short code that lets
+              the extension talk to it. Copy that code, open the extension's
+              <strong>Vault</strong> section, and paste it into the
+              <strong>“Vault access token”</strong> box. Click
+              <strong>“Save &amp; test”</strong> to confirm they're linked.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="sn">5</span>
+          <div>
+            <h3>Start capturing</h3>
+            <p>
+              Turn on <strong>“Send to Vault”</strong> in the extension. From now
+              on, whatever you choose to capture flows straight into your private
+              vault — encrypted, on your computer, yours alone.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="callout">
+        <strong>One thing to remember:</strong> your Vault lives only on this
+        computer. Nothing you capture ever leaves your machine — there's no
+        account to sign up for and no server holding your data. Want the deeper
+        details? The
+        <a href="https://github.com/alter-me-a-i/vault/tree/main/docs" target="_blank" rel="noopener noreferrer" style="color:var(--accent-2);text-decoration:none;border-bottom:1px solid rgba(255,138,61,.4)">Vault docs</a>
+        and the
+        <a href="https://github.com/alter-me-a-i" target="_blank" rel="noopener noreferrer" style="color:var(--accent-2);text-decoration:none;border-bottom:1px solid rgba(255,138,61,.4)">GitHub org</a>
+        have everything.
+      </p>
     </div>
-  </main>
+  </section>
+
+  <!-- ───────────────── LINKS OUT ───────────────── -->
+  <section id="more">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">explore the rest</span>
+        <h2>Where this fits</h2>
+      </div>
+
+      <div class="outlinks">
+        <a class="outlink" href="https://marcoajello.ai" target="_blank" rel="noopener noreferrer">
+          <span>
+            <span class="ol-name">marcoajello.ai</span>
+            <span class="ol-sub">the hub — how the whole suite fits together</span>
+          </span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="outlink" href="https://alter-me.ai" target="_blank" rel="noopener noreferrer">
+          <span>
+            <span class="ol-name">alter-me.ai</span>
+            <span class="ol-sub">the public side — the face you show the world</span>
+          </span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="outlink" href="https://github.com/alter-me-a-i" target="_blank" rel="noopener noreferrer">
+          <span>
+            <span class="ol-name">github.com/alter-me-a-i</span>
+            <span class="ol-sub">all the source — free &amp; open, end to end</span>
+          </span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="outlink" href="https://buymeacoffee.com/marcoajello" target="_blank" rel="noopener noreferrer">
+          <span>
+            <span class="ol-name">☕ buy me a coffee</span>
+            <span class="ol-sub">support the project, if you'd like</span>
+          </span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── FOOTER ───────────────── -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-inner">
+        <span class="fmark">
+          my<span class="slash">-</span>alter — the private side of
+          alter<span class="slash">/</span>me<span class="slash">/</span>a<span class="slash">/</span>i
+        </span>
+        <div class="foot-links">
+          <a href="https://marcoajello.ai" target="_blank" rel="noopener noreferrer">hub ↗</a>
+          <a href="https://alter-me.ai" target="_blank" rel="noopener noreferrer">alter-me ↗</a>
+          <a href="https://github.com/alter-me-a-i" target="_blank" rel="noopener noreferrer">github ↗</a>
+          <a href="https://buymeacoffee.com/marcoajello" target="_blank" rel="noopener noreferrer">coffee ↗</a>
+        </div>
+      </div>
+      <p style="text-align:center;color:var(--faint);font-size:0.72rem;padding-bottom:2rem;letter-spacing:0.04em;">
+        local-first · permission-gated · nothing leaves your machine
+      </p>
+    </div>
+  </footer>
+
 </body>
 </html>
