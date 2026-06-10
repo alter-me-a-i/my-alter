@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Privacy Policy — alter/me/a/i</title>
+<meta name="description" content="alter/me/a/i is local-first. Everything it captures stays in an encrypted vault on your own device — nothing is uploaded, shared, or sold." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #000; color: #fff;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    line-height: 1.65; font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+  a { color: inherit; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.32em; font-size: 11px; opacity: 0.5; }
+  h1 { font-size: 1.9rem; font-weight: 600; margin: 0.6rem 0 0.3rem; letter-spacing: -0.01em; }
+  .meta { opacity: 0.5; font-size: 13px; margin-bottom: 2.2rem; }
+  h2 { font-size: 1.05rem; font-weight: 600; margin: 2.4rem 0 0.6rem; }
+  p { opacity: 0.86; }
+  ul { padding-left: 1.2rem; }
+  li { opacity: 0.86; margin: 0.3rem 0; }
+  .rule { height: 1px; background: rgba(255,255,255,0.14); margin: 2.6rem 0; }
+  .box { border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 1.1rem 1.3rem; background: rgba(255,255,255,0.03); }
+  .box strong { font-weight: 600; }
+  .back { display: inline-block; margin-bottom: 2rem; opacity: 0.6; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.25); }
+  .back:hover { opacity: 1; }
+  strong { color: #fff; }
+  code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 0.92em; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="https://my-alter.ai">&larr; my-alter.ai</a>
+    <div class="kicker">alter / me / a / i</div>
+    <h1>Privacy Policy</h1>
+    <div class="meta">Effective June 10, 2026</div>
+
+    <div class="box">
+      <strong>The short version:</strong> alter/me/a/i is local-first. Everything it captures is stored in an encrypted vault <strong>on your own device</strong>. Nothing is uploaded, sent to us, shared, or sold. There are no servers, no analytics, no ads, no third-party tracking.
+    </div>
+
+    <h2>What the extension does</h2>
+    <p>alter/me/a/i keeps a private, on-device copy of your own web activity — the same data that cookies and trackers collect about you — and blocks third-party tracking and browser fingerprinting as you browse. You own and control all of it.</p>
+
+    <h2>What it accesses</h2>
+    <ul>
+      <li><strong>Web history</strong> — page URLs, titles, and times of visit.</li>
+      <li><strong>Website content</strong> — page text and the text you select, copied into your local vault.</li>
+      <li><strong>User activity</strong> — search queries and text from non-password forms you submit.</li>
+    </ul>
+    <p>It <strong>explicitly excludes password fields</strong> — anything inside a form that contains a password is never captured.</p>
+
+    <h2>Where your data lives</h2>
+    <p>In a local, encrypted vault on your own device. Only you hold the key — it is derived from your passphrase, which we never see and which has no recovery. No copy of your captured data is ever sent to us or to any external server.</p>
+
+    <h2>What we never do</h2>
+    <ul>
+      <li>No servers. We operate none, and your data never leaves your machine.</li>
+      <li>No selling or transferring your data to third parties.</li>
+      <li>No advertising, no analytics, no behavioral profiling by us.</li>
+      <li>No use of your data for creditworthiness or lending.</li>
+    </ul>
+
+    <h2>The one optional connection</h2>
+    <p>You may choose to connect the extension to your own <strong>Vault companion app</strong> running on your own computer, over a local loopback address (<code>127.0.0.1:8787</code>). This stays entirely on your device, is off by default, and contacts no remote server.</p>
+
+    <h2>Your controls</h2>
+    <ul>
+      <li>Turn capture on or off at any time.</li>
+      <li>Choose how much protection to apply (the protection personas).</li>
+      <li>Lock the vault, and set it to auto-lock after a timeout.</li>
+      <li>Erase everything with one action — irreversibly, because only you hold the key.</li>
+    </ul>
+
+    <h2>Permissions, briefly</h2>
+    <ul>
+      <li><strong>storage</strong> — saves your settings and the vault's salt, on your device.</li>
+      <li><strong>declarativeNetRequest</strong> — blocks third-party trackers and strips third-party cookies/referrers.</li>
+      <li><strong>scripting</strong> — applies your chosen anti-fingerprinting protections in the page.</li>
+      <li><strong>alarms</strong> — auto-locks the vault after your chosen timeout.</li>
+      <li><strong>host access</strong> — lets capture and protection run on the sites you visit. Captured data stays local.</li>
+    </ul>
+
+    <h2>Children</h2>
+    <p>alter/me/a/i is not directed to children under 13 and does not knowingly collect data from them.</p>
+
+    <h2>Changes</h2>
+    <p>If this policy changes, we'll update this page and the effective date above.</p>
+
+    <h2>Contact</h2>
+    <p>alter/me/a/i is free and open source. Questions or concerns: open an issue at <a href="https://github.com/alter-me-a-i">github.com/alter-me-a-i</a>.</p>
+
+    <div class="rule"></div>
+    <p style="opacity:0.5;font-size:13px;">Your data, your device, your key. <a href="https://my-alter.ai">my-alter.ai</a></p>
+  </div>
+</body>
+</html>
