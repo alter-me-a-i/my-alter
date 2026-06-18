@@ -291,8 +291,6 @@ footer { border-top: 1px solid rgba(46,33,84,0.6); }
       </nav>
 
       <div class="hero">
-        <span class="badge"><span class="dot"></span> the private side · local-first · you hold the key</span>
-
         <h1 class="wordmark">my<span class="slash">-</span>alter</h1>
 
         <p class="lede">
@@ -379,11 +377,114 @@ footer { border-top: 1px solid rgba(46,33,84,0.6); }
           A short, guided walkthrough — one small step at a time, with every
           download link you need. Made for everyone, not just techies.
         </p>
-        <a href="./setup.html" style="display:inline-flex;align-items:center;gap:.5rem;margin-top:1.1rem;text-decoration:none;font-weight:700;background:var(--fill-primary);color:#fff;border-radius:12px;padding:.78rem 1.35rem">▶ Start the guided setup</a>
-        <p style="margin-top:1.5rem;color:var(--faint);font-size:.9rem">Or skim the whole thing first:</p>
       </div>
 
-      <div class="steps">
+      <style>
+      .wiz{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--border);border-radius:20px;padding:1.6rem;max-width:680px;margin:1.4rem auto 0;text-align:left;min-height:380px;display:flex;flex-direction:column}
+      @media(min-width:640px){.wiz{padding:2.2rem}}
+      .wiz-prog{display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem}
+      .wiz-bar{flex:1;height:8px;background:rgba(125,114,207,.18);border-radius:999px;overflow:hidden}
+      .wiz-fill{height:100%;width:0;background:var(--fill-primary);border-radius:999px;transition:width .35s ease}
+      .wiz-count{font-size:.8rem;color:var(--faint);white-space:nowrap}
+      .wiz-eyebrow{color:var(--private);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+      .wiz-title{font-size:1.35rem;line-height:1.25;margin-bottom:.8rem;color:var(--fg)}
+      .wiz-body{color:var(--muted);font-size:1rem;flex:1}
+      .wiz-body strong{color:var(--fg)} .wiz-body em{color:var(--fg);font-style:normal;border-bottom:1px solid rgba(255,46,136,.4)}
+      .wiz-body p{margin-bottom:.85rem} .wiz-body ul{margin:.3rem 0 .85rem 1.1rem} .wiz-body li{margin-bottom:.4rem}
+      .wiz-note{font-size:.85rem;color:var(--faint);margin-top:.6rem}
+      .wiz-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin:1rem 0 .2rem}
+      .wiz-dl{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:700;background:var(--fill-primary);color:#fff;border-radius:12px;padding:.65rem 1.05rem;font-size:.95rem}
+      .wiz-dl.alt{background:transparent;color:var(--private);border:1px solid rgba(125,114,207,.5);font-weight:500}
+      .wiz-dl:hover{filter:brightness(1.07)}
+      .wiz-nav{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1.5rem}
+      .wiz-btn{font-family:var(--font);cursor:pointer;border-radius:12px;padding:.65rem 1.2rem;font-size:.92rem;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--muted)}
+      .wiz-btn:hover:not(:disabled){color:var(--fg);border-color:var(--private)} .wiz-btn:disabled{opacity:.35;cursor:default}
+      .wiz-next{background:var(--fill-primary);color:#fff;border:0}
+      .wiz-dots{display:flex;gap:6px;flex-wrap:wrap}
+      .wiz-dot{width:7px;height:7px;border-radius:999px;background:rgba(125,114,207,.3);cursor:pointer}
+      .wiz-dot.on{background:var(--accent)}
+      </style>
+
+      <div class="wiz" id="wiz">
+        <div class="wiz-prog"><div class="wiz-bar"><div class="wiz-fill" id="wfill"></div></div><div class="wiz-count" id="wcount"></div></div>
+        <div class="wiz-eyebrow" id="weyebrow"></div>
+        <h3 class="wiz-title" id="wtitle"></h3>
+        <div class="wiz-body" id="wbody"></div>
+        <div class="wiz-nav">
+          <button class="wiz-btn" id="wback">‹ Back</button>
+          <div class="wiz-dots" id="wdots"></div>
+          <button class="wiz-btn wiz-next" id="wnext">Next ›</button>
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        var STORE="https://chromewebstore.google.com/detail/altermeai/oglkjafeedbmgogidpiffmghghjcpmlo";
+        var VAULT="https://github.com/alter-me-a-i/vault/releases/download/v0.1.0/Vault-0.1.0-arm64.dmg";
+        var OLLAMA="https://ollama.com/download", LMSTUDIO="https://lmstudio.ai";
+        var LLAMA="https://ollama.com/library/llama3.1", QWEN="https://ollama.com/library/qwen2.5";
+        function a(label,href,alt){return '<a class="wiz-dl'+(alt?' alt':'')+'" href="'+href+'" target="_blank" rel="noopener noreferrer">'+label+' ↗</a>'}
+        var steps=[
+          {e:"Welcome",t:"Let's set up your own private AI",h:
+            '<p>In a few small steps you\'ll have a private AI that lives entirely on your computer and is built from your own data. No account, no cloud, nothing for sale.</p>'+
+            '<p>You\'ll set up three things:</p><ul><li>a <strong>browser add-on</strong> that keeps a copy of what you choose,</li><li>a <strong>Vault</strong> app that stores it, encrypted, on your Mac,</li><li>and a <strong>free AI engine</strong> that turns it into your own assistant.</li></ul>'+
+            '<p class="wiz-note">About 10–15 minutes, mostly waiting on downloads. Press <strong>Next</strong> to begin.</p>'},
+          {e:"Step 1 — Capture",t:"Add the browser add-on",h:
+            '<p>The piece that keeps a private copy of your AI chats and browsing — only what you choose. Free from the Chrome Web Store.</p>'+
+            '<div class="wiz-actions">'+a("Add to Chrome",STORE)+'</div>'+
+            '<p class="wiz-note">Click “Add to Chrome,” then “Add extension.” Then press Next.</p>'},
+          {e:"Step 2 — Store",t:"Download the Vault app",h:
+            '<p>Your private, encrypted store for Mac — Apple-notarized, so it opens cleanly with no warnings.</p>'+
+            '<div class="wiz-actions">'+a("Download for Mac",VAULT)+'</div>'+
+            '<p class="wiz-note">When it finishes, open it and drag the Vault into your Applications folder. Then Next.</p>'},
+          {e:"Step 3 — Your key",t:"Open it and set a password",h:
+            '<p>Open the Vault and choose a <strong>master password</strong> — your key, which never leaves your machine.</p>'+
+            '<p>You\'ll get a <strong>Recovery Kit</strong>: three codes. Save them somewhere safe and separate — any <strong>two of the three</strong> let you back in if you forget your password.</p>'+
+            '<p class="wiz-note">If you lose both the password and the kit, the data can\'t be recovered — that\'s what makes it truly private. Save the kit, then Next.</p>'},
+          {e:"Step 4 — Connect",t:"Link the add-on to the Vault",h:
+            '<p>In the Vault\'s dashboard, click <strong>Copy</strong> on the <strong>access token</strong>.</p>'+
+            '<p>Open the add-on, find <strong>“Send to Vault,”</strong> paste it in, and save. Now the two talk to each other — over your own computer only.</p>'+
+            '<p class="wiz-note">Press Next once they\'re linked.</p>'},
+          {e:"Step 5 — Fill it",t:"Bring in your conversations",h:
+            '<ul><li><strong>Going forward:</strong> turn on <strong>Capture</strong> in the add-on — new chats flow in as they happen.</li><li><strong>Your past:</strong> in the Vault, <strong>Import a chat file</strong> (a Claude/ChatGPT export) or <strong>Import my Cowork chats</strong>.</li></ul>'+
+            '<p class="wiz-note">The more you bring in, the more it sounds like you. Press Next.</p>'},
+          {e:"Step 6 — The engine",t:"Get your free AI engine",h:
+            '<p>Your AI needs a small, free app to run the model on your Mac. Nothing to type — just download and open it.</p>'+
+            '<div class="wiz-actions">'+a("Download Ollama (free)",OLLAMA)+a("or LM Studio",LMSTUDIO,true)+'</div>'+
+            '<p>Install it and open it once. The Vault finds it on its own — nothing to configure.</p>'+
+            '<p class="wiz-note">Both are free and run entirely on your computer. Either works.</p>'},
+          {e:"Step 7 — The model",t:"Download a model (Llama or Qwen)",h:
+            '<p>The “model” is the actual brain. In the app you just opened, pick one and it downloads itself — one wait of a few minutes:</p>'+
+            '<div class="wiz-actions">'+a("Llama 3.1",LLAMA,true)+a("Qwen 2.5",QWEN,true)+'</div>'+
+            '<p>Not sure? Pick <strong>Llama 3.1</strong>. The Vault uses whichever you download, automatically.</p>'+
+            '<p class="wiz-note">These links show the models; you download them with one click inside the app. Then Next.</p>'},
+          {e:"Step 8 — Talk to it",t:"Meet your AI",h:
+            '<p>Back in the Vault, click the <strong>My AI</strong> tab and ask anything about your own life — “what was I working through last week?”</p>'+
+            '<p>It answers from <em>your</em> data, shows which conversations it used, and runs entirely on your machine.</p>'+
+            '<p class="wiz-note">If it says no engine is running, just make sure the app from Step 6 is open. Press Next.</p>'},
+          {e:"Done",t:"That\'s it — you own your AI 🎉",h:
+            '<p>You now have a private AI built from your own data, on your own computer, that nobody else can see or sell.</p>'+
+            '<p>Keep feeding it (the add-on does this quietly), and later <strong>license the personas you choose to share</strong> — on your terms.</p>'+
+            '<p class="wiz-note">Your data, your model, yours to keep.</p>'}
+        ];
+        var i=0, $=function(x){return document.getElementById(x)};
+        var fill=$("wfill"),count=$("wcount"),eye=$("weyebrow"),title=$("wtitle"),body=$("wbody"),back=$("wback"),next=$("wnext"),dots=$("wdots");
+        dots.innerHTML=steps.map(function(_,n){return '<span class="wiz-dot" data-n="'+n+'"></span>'}).join("");
+        function render(){
+          var s=steps[i]; eye.textContent=s.e; title.innerHTML=s.t; body.innerHTML=s.h;
+          count.textContent=i===0?"Start":("Step "+i+" of "+(steps.length-1));
+          fill.style.width=((i/(steps.length-1))*100)+"%";
+          back.disabled=i===0; next.textContent=i===steps.length-1?"Finish":"Next ›";
+          Array.prototype.forEach.call(dots.children,function(d,n){d.classList.toggle("on",n<=i)});
+        }
+        back.onclick=function(){if(i>0){i--;render()}};
+        next.onclick=function(){if(i<steps.length-1){i++;render()}else{i=0;render()}};
+        Array.prototype.forEach.call(dots.children,function(d){d.onclick=function(){i=+d.getAttribute("data-n");render()}});
+        render();
+      })();
+      </script>
+
+      <div class="steps" hidden>
         <div class="step">
           <span class="sn">1</span>
           <div>
