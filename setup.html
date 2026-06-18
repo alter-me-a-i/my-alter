@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>my-alter — guided setup</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0c0818; --surface:#15102a; --surface-2:#1f1740; --border:#2e2154;
+  --fg:#fdf2ff; --muted:#a89ad0; --faint:#6f60a0;
+  --accent:#ff2e88; --accent-2:#ff8a3d; --private:#7d72cf; --ok:#00f0a8;
+  --fill-primary:linear-gradient(135deg,#ff2e88,#ff8a3d);
+  --font:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color-scheme:dark;-webkit-text-size-adjust:100%}
+body{
+  background:radial-gradient(1100px 600px at 50% -10%,#1a0f33 0,transparent 60%),
+    radial-gradient(900px 500px at 100% 0%,#241152 0,transparent 55%),var(--bg);
+  color:var(--fg);font-family:var(--font);line-height:1.6;min-height:100vh;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;
+  padding:1.25rem;
+}
+a{color:inherit}
+.top{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;padding:1rem 0 0.5rem;font-size:.85rem}
+.mark{font-weight:700;letter-spacing:-.02em}
+.mark .slash{color:var(--accent)}
+.top a{color:var(--faint);text-decoration:none}
+.top a:hover{color:var(--fg)}
+
+.card{
+  width:100%;max-width:680px;background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  border:1px solid var(--border);border-radius:20px;padding:1.6rem;margin-top:1rem;
+  box-shadow:0 24px 60px -30px rgba(0,0,0,.7);min-height:380px;display:flex;flex-direction:column;
+}
+@media(min-width:640px){.card{padding:2.2rem}}
+
+/* progress */
+.prog{display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem}
+.prog .bar{flex:1;height:8px;background:rgba(125,114,207,.18);border-radius:999px;overflow:hidden}
+.prog .fill{height:100%;width:0;background:var(--fill-primary);border-radius:999px;transition:width .35s ease}
+.prog .count{font-size:.8rem;color:var(--faint);white-space:nowrap}
+
+.eyebrow{color:var(--private);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:1.5rem;line-height:1.25;margin-bottom:.8rem;letter-spacing:-.01em}
+@media(min-width:640px){h1{font-size:1.8rem}}
+.body{color:var(--muted);font-size:1rem;flex:1}
+.body strong{color:var(--fg)}
+.body p{margin-bottom:.9rem}
+.body ul{margin:.4rem 0 .9rem 1.1rem;color:var(--muted)}
+.body li{margin-bottom:.4rem}
+.note{font-size:.86rem;color:var(--faint);margin-top:.7rem}
+kbd{background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:.9em}
+
+/* action links inside a step */
+.actions{display:flex;flex-wrap:wrap;gap:.7rem;margin:1.1rem 0 .2rem}
+.dl{
+  display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:700;
+  background:var(--fill-primary);color:#fff;border:0;border-radius:12px;padding:.7rem 1.1rem;font-size:.95rem;
+}
+.dl.alt{background:transparent;color:var(--private);border:1px solid rgba(125,114,207,.5);font-weight:500}
+.dl:hover{filter:brightness(1.07)}
+
+/* nav buttons */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1.6rem}
+button.btn{
+  font-family:var(--font);cursor:pointer;border-radius:12px;padding:.7rem 1.3rem;font-size:.95rem;font-weight:700;
+  border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s;
+}
+button.btn:hover:not(:disabled){color:var(--fg);border-color:var(--private)}
+button.btn:disabled{opacity:.35;cursor:default}
+button.next{background:var(--fill-primary);color:#fff;border:0}
+.dots{display:flex;gap:6px}
+.dot{width:7px;height:7px;border-radius:999px;background:rgba(125,114,207,.3)}
+.dot.on{background:var(--accent)}
+.foot{max-width:680px;width:100%;text-align:center;color:var(--faint);font-size:.8rem;margin-top:1.2rem}
+</style>
+</head>
+<body>
+  <div class="top">
+    <span class="mark">my<span class="slash">/</span>alter</span>
+    <a href="./">‹ back to my-alter</a>
+  </div>
+
+  <div class="card">
+    <div class="prog">
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="count" id="count"></div>
+    </div>
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="title"></h1>
+    <div class="body" id="bodytext"></div>
+    <div class="nav">
+      <button class="btn" id="back">‹ Back</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn next" id="next">Next ›</button>
+    </div>
+  </div>
+  <p class="foot">Everything here is free and runs on your own Mac. Nothing you set up ever leaves your computer.</p>
+
+<script>
+const STORE="https://chromewebstore.google.com/detail/altermeai/oglkjafeedbmgogidpiffmghghjcpmlo";
+const VAULT="https://github.com/alter-me-a-i/vault/releases/download/v0.1.0/Vault-0.1.0-arm64.dmg";
+const OLLAMA="https://ollama.com/download";
+const LMSTUDIO="https://lmstudio.ai";
+const LLAMA="https://ollama.com/library/llama3.1";
+const QWEN="https://ollama.com/library/qwen2.5";
+
+function action(label,href,alt){return `<a class="dl${alt?' alt':''}" href="${href}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`}
+
+const steps=[
+ {eye:"Welcome",title:"Let's set up your own private AI",
+  html:`<p>In a few small steps you'll have a private AI that lives entirely on your computer and is built from your own data. No account, no cloud, nothing for sale.</p>
+        <p>You'll set up three things:</p>
+        <ul><li>a <strong>browser add-on</strong> that quietly keeps a copy of what you choose,</li>
+        <li>a <strong>Vault</strong> app that stores it, encrypted, on your Mac,</li>
+        <li>and a <strong>free AI engine</strong> that turns it into your own assistant.</li></ul>
+        <p class="note">Takes about 10–15 minutes, most of it just waiting for downloads. Click <strong>Next</strong> to begin.</p>`},
+
+ {eye:"Step 1 — Capture",title:"Add the browser add-on",
+  html:`<p>This is the piece that keeps a private copy of your AI chats and browsing — only what you choose. It's free from the Chrome Web Store.</p>
+        <div class="actions">${action("Add to Chrome",STORE)}</div>
+        <p class="note">On the store page, click the blue <strong>“Add to Chrome”</strong> button, then <strong>“Add extension.”</strong> That's it — come back here and press Next.</p>`},
+
+ {eye:"Step 2 — Store",title:"Download the Vault app",
+  html:`<p>The Vault is your private, encrypted store for Mac. It's Apple-notarized, so it opens cleanly with no scary warnings.</p>
+        <div class="actions">${action("Download for Mac",VAULT)}</div>
+        <p class="note">When it finishes downloading, open it and drag the <strong>Vault</strong> icon into your <strong>Applications</strong> folder. Then press Next.</p>`},
+
+ {eye:"Step 3 — Your key",title:"Open it and set a password",
+  html:`<p>Open the Vault and choose a <strong>master password</strong>. This is your key — it never leaves your machine, and we never see it.</p>
+        <p>You'll then be shown a <strong>Recovery Kit</strong>: three codes. Save them somewhere safe and separate (a password manager, a note, a drawer). Any <strong>two of the three</strong> will let you back in if you ever forget your password.</p>
+        <p class="note">Important: if you lose both the password and the kit, the data can't be recovered — that's what makes it truly private. Save the kit, then press Next.</p>`},
+
+ {eye:"Step 4 — Connect",title:"Link the add-on to the Vault",
+  html:`<p>In the Vault's dashboard you'll see an <strong>access token</strong> (a long code). Click <strong>Copy</strong>.</p>
+        <p>Then open the browser add-on, find <strong>“Send to Vault,”</strong> paste the token in, and save. Now the two talk to each other — privately, over your own computer only.</p>
+        <p class="note">Press Next once they're linked.</p>`},
+
+ {eye:"Step 5 — Fill it",title:"Bring in your conversations",
+  html:`<p>Two easy ways, use either or both:</p>
+        <ul><li><strong>Going forward:</strong> turn on <strong>Capture</strong> in the add-on — new AI chats and browsing flow into the Vault as they happen.</li>
+        <li><strong>Your past:</strong> in the Vault, click <strong>Import a chat file</strong> (load a Claude or ChatGPT export), or <strong>Import my Cowork chats</strong> for your conversations here.</li></ul>
+        <p class="note">The more you bring in, the more your AI will sound like you. Press Next when you've added some.</p>`},
+
+ {eye:"Step 6 — The engine",title:"Get your free AI engine",
+  html:`<p>Your AI needs a small, free app to actually run the model on your Mac. Nothing to type — just download and open it.</p>
+        <div class="actions">${action("Download Ollama (free)",OLLAMA)}${action("or LM Studio",LMSTUDIO,true)}</div>
+        <p>Install it and open it once. That's the whole setup — the Vault will find it on its own, with nothing to configure.</p>
+        <p class="note">Both are free and run entirely on your computer. Ollama is the simplest; LM Studio is a bit more visual. Either works.</p>`},
+
+ {eye:"Step 7 — The model",title:"Download a model (Llama or Qwen)",
+  html:`<p>The “model” is the actual brain. In the app you just opened, pick one from its list and it downloads itself — one wait of a few minutes. Two great, free starting points:</p>
+        <div class="actions">${action("Llama 3.1",LLAMA,true)}${action("Qwen 2.5",QWEN,true)}</div>
+        <p>Not sure? Choose <strong>Llama 3.1</strong>. You can always add others later, and the Vault will use whichever you've downloaded automatically.</p>
+        <p class="note">These links show you the models; you actually download them with one click inside Ollama or LM Studio. Press Next once one has finished.</p>`},
+
+ {eye:"Step 8 — Talk to it",title:"Meet your AI",
+  html:`<p>Back in the Vault, click the <strong>My AI</strong> tab and ask it anything about your own life and thinking — “what was I working through last week?”, “what's my book about?”</p>
+        <p>It answers from <em>your</em> data, shows you which conversations it used, and runs entirely on your machine.</p>
+        <p class="note">If it says no engine is running, just make sure the app from Step 6 is open. Press Next.</p>`},
+
+ {eye:"Done",title:"That's it — you own your AI 🎉",
+  html:`<p>You now have a private AI built from your own data, running on your own computer, that nobody else can see or sell.</p>
+        <p>From here you can keep feeding it (the add-on does this quietly), and later <strong>license the personas you choose to share</strong> — on your terms.</p>
+        <div class="actions">${action("Back to my-alter","./",true)}</div>
+        <p class="note">Welcome to your own corner of the gift economy. Your data, your model, yours to keep.</p>`},
+];
+
+let i=0;
+const fill=document.getElementById('fill'),count=document.getElementById('count'),
+  eyebrow=document.getElementById('eyebrow'),title=document.getElementById('title'),
+  body=document.getElementById('bodytext'),back=document.getElementById('back'),
+  next=document.getElementById('next'),dots=document.getElementById('dots');
+
+dots.innerHTML=steps.map((_,n)=>`<span class="dot" data-n="${n}"></span>`).join('');
+
+function render(){
+  const s=steps[i];
+  eyebrow.textContent=s.eye;
+  title.innerHTML=s.title;
+  body.innerHTML=s.html;
+  count.textContent=`Step ${i} of ${steps.length-1}`.replace('Step 0 of '+(steps.length-1),'Start');
+  fill.style.width=`${(i/(steps.length-1))*100}%`;
+  back.disabled=i===0;
+  next.textContent=i===steps.length-1?'Finish':'Next ›';
+  [...dots.children].forEach((d,n)=>d.classList.toggle('on',n<=i));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+back.onclick=()=>{if(i>0){i--;render();}};
+next.onclick=()=>{if(i<steps.length-1){i++;render();}else{window.location.href='./';}};
+[...dots.children].forEach(d=>d.onclick=()=>{i=+d.dataset.n;render();});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next.click();if(e.key==='ArrowLeft')back.click();});
+render();
+</script>
+</body>
+</html>
